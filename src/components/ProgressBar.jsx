@@ -2,7 +2,7 @@ const ProgressBar = ({ amount, max }) => {
   const ratio = (amount / max) * 100;
 
   return (
-    <div className="h-4 w-full bg-slate-300 rounded-full">
+    <div className="h-4 w-[350px] bg-slate-300 rounded-full">
       <div
         style={{ width: `${ratio}%` }}
         className={`h-full rounded-lg ${

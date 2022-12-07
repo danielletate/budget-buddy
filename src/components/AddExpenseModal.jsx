@@ -1,20 +1,25 @@
 import { AiOutlineClose } from 'react-icons/ai';
 import { useRef } from 'react';
-import { useBudgets } from '../context/BudgetsContext';
+import { useBudgets, UNCATEGORIZED_BUDGET_ID } from '../context/BudgetsContext';
 
-export default function AddBudgetModal({ open, handleCloseModal }) {
+export default function AddExpenseModal({
+  open,
+  handleCloseModal,
+  defaultBudgetId,
+}) {
   // References to "name" and "max" input field values
-  const nameRef = useRef();
-  const maxRef = useRef();
+  const descriptionRef = useRef();
+  const amountRef = useRef();
+  const budgetIdRef = useRef();
 
-  // Brings in addBudget hook from context
-  const { addBudget } = useBudgets();
+  const { addExpense, budgets } = useBudgets();
 
   function handleSubmit(e) {
     e.preventDefault();
-    addBudget({
-      name: nameRef.current.value,
-      max: parseFloat(maxRef.current.value),
+    addExpense({
+      description: descriptionRef.current.value,
+      amount: parseFloat(amountRef.current.value),
+      budgetId: budgetIdRef.current.value,
     });
     // Closes modal after submit
     handleCloseModal();
@@ -30,7 +35,7 @@ export default function AddBudgetModal({ open, handleCloseModal }) {
           <div className="rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none ">
             {/*Header*/}
             <div className="flex justify-between p-6 border-b border-solid border-slate-200 rounded-t">
-              <h3 className="text-2xl font-semibold">New Budget</h3>
+              <h3 className="text-2xl font-semibold">New Expense</h3>
               <button
                 className="text-[#FF1659] text-2xl"
                 onClick={handleCloseModal}
@@ -42,26 +47,44 @@ export default function AddBudgetModal({ open, handleCloseModal }) {
             <div className="relative p-6 flex-auto">
               <form onSubmit={handleSubmit}>
                 <div className="flex flex-col">
-                  <label htmlFor="name" className="mb-2">
-                    Name
+                  <label htmlFor="description" className="mb-2">
+                    Description
                   </label>
                   <input
                     type="text"
                     className="py-1 outline outline-gray-300 rounded-sm mb-6"
                     required
-                    ref={nameRef}
+                    ref={descriptionRef}
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="max-spending" className="mb-2">
-                    Maximum Spending
+                  <label htmlFor="amount" className="mb-2">
+                    Amount
                   </label>
                   <input
                     type="number"
-                    className="py-1 outline outline-gray-300 rounded-sm"
+                    className="py-1 outline outline-gray-300 rounded-sm mb-6"
                     required
-                    ref={maxRef}
+                    ref={amountRef}
+                    min={0}
+                    step={0.01}
                   />
+                </div>
+                <div>
+                  <label htmlFor="budget-id">Budget</label>
+                  <select
+                    name="budgetId"
+                    className="py-1 outline outline-gray-300 rounded-sm block w-full mt-2"
+                    defaultValue={defaultBudgetId}
+                    ref={budgetIdRef}
+                  >
+                    <option id={UNCATEGORIZED_BUDGET_ID}>Uncategorized</option>
+                    {budgets.map((budget) => (
+                      <option key={budget.id} value={budget.id}>
+                        {budget.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="flex justify-end">
                   <button
@@ -77,7 +100,7 @@ export default function AddBudgetModal({ open, handleCloseModal }) {
         </div>
       </div>
       {/* Overlay */}
-      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+      <div className="opacity-90 fixed inset-0 z-40 bg-black"></div>
     </>
   );
 }

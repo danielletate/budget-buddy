@@ -5,6 +5,8 @@ import useLocalStorage from '../hooks/useLocalStorage';
 // Creates context
 const BudgetsContext = React.createContext();
 
+export const UNCATEGORIZED_BUDGET_ID = 'Uncategorized';
+
 export function useBudgets() {
   return useContext(BudgetsContext);
 }
@@ -27,7 +29,7 @@ export const BudgetsProvider = ({ children }) => {
 
   // Takes array of current budgets and adds a new budget with unique id, name, and max values
   function addBudget({ name, max }) {
-    setBudgets((...prevBudgets) => {
+    setBudgets((prevBudgets) => {
       // Will not add a budget with the same name as an exisiting budget
       if (prevBudgets.find((budget) => budget.name === name)) {
         return prevBudgets;
@@ -36,8 +38,15 @@ export const BudgetsProvider = ({ children }) => {
     });
   }
 
-  // Deletes budget item that does not have the current id being passed in
+  // Deletes specific budget and moves expenses into uncategorized category
   function deleteBudget({ id }) {
+    setExpenses((prevExpenses) => {
+      return prevExpenses.map((expense) => {
+        if (expense.budgetId !== id) return expense;
+        return { ...expense, budgetId: UNCATEGORIZED_BUDGET_ID };
+      });
+    });
+
     setBudgets((prevBudgets) => {
       return prevBudgets.filter((budget) => budget.id !== id);
     });
