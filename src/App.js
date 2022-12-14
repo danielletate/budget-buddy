@@ -35,7 +35,7 @@ function App() {
               </h1>
               <img
                 src={Logo}
-                className="h-28 w-34 mr-20 md:mr-0"
+                className="h-28 w-34 mr-20 md:mr-22"
                 alt="dog-logo"
               />
             </div>
