@@ -33,7 +33,11 @@ function App() {
               <h1 className="text-xl me-auto uppercase font-bold text-slate-200 md:text-3xl">
                 Budget Buddy
               </h1>
-              <img src={Logo} className="h-28 w-34 ml-2" alt="dog-logo" />
+              <img
+                src={Logo}
+                className="h-28 w-34 mr-20 md:mr-0"
+                alt="dog-logo"
+              />
             </div>
 
             {/* Buttons */}
