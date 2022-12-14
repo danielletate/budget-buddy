@@ -6,6 +6,7 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* Progress bar */
 progress {
   background-color: #f3f3f3;
   border: 0;
